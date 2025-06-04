@@ -1,0 +1,52 @@
+---
+- name: Настройка удаленного пользователя
+  hosts: servers
+  become: yes
+  tasks:
+    - name: Создать пользователя
+      user:
+        name: devuser
+        shell: /bin/bash
+        create_home: yes
+
+    - name: Добавить в sudo
+      user:
+        name: devuser
+        groups: sudo
+        append: yes
+
+    - name: Создать .ssh директорию
+      file:
+        path: /home/devuser/.ssh
+        state: directory
+        owner: devuser
+        group: devuser
+        mode: '0700'
+
+    - name: Установить публичный ключ
+      copy:
+        src: files/id_rsa_ansible.pub
+        dest: /home/devuser/.ssh/authorized_keys
+        owner: devuser
+        group: devuser
+        mode: '0600'
+
+    - name: Отключить SSH-доступ по паролю
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication'
+        line: 'PasswordAuthentication no'
+        state: present
+
+    - name: Перезапустить SSH
+      service:
+        name: ssh
+        state: restarted
+
+    - name: Создать директорию /opt/dev_data
+      file:
+        path: /opt/dev_data
+        state: directory
+        owner: devuser
+        group: devuser
+        mode: '0660'
