@@ -1,9 +1,9 @@
-# 🧰 Ansible Playbook: devuser Setup with Vagrant and VirtualBox
+#  Ansible Playbook: devuser Setup with Vagrant and VirtualBox
 
 Этот проект демонстрирует, как с помощью **Ansible** настроить пользователя `devuser` на виртуальной машине, созданной через **Vagrant** и **VirtualBox**.
 ---
 
-## 📦 Что делает playbook?
+##  Что делает playbook?
 
 - Создает пользователя `devuser`
 - Назначает его в группу `sudo`
@@ -32,20 +32,14 @@ ansible-playbook -i inventory.ini playbook.yml
 
 ![Ansible](pics/ansible2.png)
 
+
+Подключаемся по ssh и проверяем создание папки
+
 ![Подключаемся по ssh и проверяем](pics/directory.png)
 
 ---
 
-## 🖼 Скриншоты (добавь сюда)
-
-- `vagrant up`
-- `ansible-playbook` запуск
-- `ls -ld /opt/dev_data`
-- `sudo whoami` от имени `devuser`
-
----
-
-## 🗝 SSH доступ к виртуалке
+## SSH доступ к виртуалке
 
 ```bash
 ssh devuser@127.0.0.1 -p 2222 -i .vagrant/machines/default/virtualbox/private_key
@@ -54,7 +48,7 @@ ssh devuser@127.0.0.1 -p 2222 -i .vagrant/machines/default/virtualbox/private_ke
 
 ---
 
-## 📁 Структура
+##  Структура
 
 ```
  .
