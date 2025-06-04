@@ -1,0 +1,50 @@
+version: '3.9'
+
+networks:
+  custom_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.10.0/28
+
+volumes:
+  new_db_data:
+  dev_db_data:
+
+services:
+  web:
+    image: nginx:alpine
+    container_name: web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    networks:
+      custom_net:
+        ipv4_address: 10.10.10.2
+
+  new_db:
+    image: postgres:15
+    container_name: new_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: app_db
+    volumes:
+      - new_db_data:/var/lib/postgresql/data
+    networks:
+      custom_net:
+        ipv4_address: 10.10.10.3
+
+  dev_db:
+    image: postgres:15
+    container_name: dev_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: app_db
+    volumes:
+      - dev_db_data:/var/lib/postgresql/data
+    networks:
+      custom_net:
+        ipv4_address: 10.10.10.4
