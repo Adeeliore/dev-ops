@@ -97,8 +97,6 @@ molecule test
 
 ![Molecule](pics/molecule.png)
 
-![Molecule](pics/molecule1.png)
-
 ![Molecule](pics/molecule2.png)
 
 ![Molecule](pics/molecule3.png)
