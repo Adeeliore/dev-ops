@@ -1,0 +1,17 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+
+platforms:
+  - name: instance
+    image: ubuntu:20.04
+    privileged: true
+
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      roles_path: ../../../roles

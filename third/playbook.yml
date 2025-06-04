@@ -1,0 +1,19 @@
+---
+- name: Set up remote user and ssh
+  hosts: servers
+  become: true
+  roles:
+    - user
+    - ssh
+
+- name: Create /opt/dev_data
+  hosts: servers
+  become: true
+  tasks:
+    - name: Create directory
+      file:
+        path: /opt/dev_data
+        state: directory
+        owner: devuser
+        group: devuser
+        mode: '0660'
