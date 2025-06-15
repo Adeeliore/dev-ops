@@ -1,0 +1,26 @@
+app:
+  github-token: token
+  stackoverflow:
+    key: key
+    access-token: token
+  bot-base-url: http://localhost:8080
+  github-api-url: "https://api.github.com/repos/{owner}/{repo}"
+  stackoverflow-api-url: "https://api.stackexchange.com/2.3/questions/{id}"
+  include-stacktrace: true
+
+spring:
+  application:
+    name: Scrapper
+  liquibase:
+    enabled: true
+    change-log: classpath:migrations/changelog.yaml
+  jpa:
+    hibernate:
+      ddl-auto: validate
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+  datasource:
+    url: jdbc:tc:postgresql:17:///local?TC_REUSABLE=true
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    username: postgres
+    password: test
