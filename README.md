@@ -17,3 +17,6 @@
 
 ## Директория fifth-docker-compose
 Четвертая Д/З - docker compose
+
+## Директория tg-bot-link-checker
+Пятая Д/З - финальная
