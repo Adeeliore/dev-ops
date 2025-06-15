@@ -1,0 +1,7 @@
+CREATE TABLE links (
+    link_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    url VARCHAR(255) UNIQUE NOT NULL,
+    type VARCHAR(20) NOT NULL CHECK (type IN ('GITHUB', 'STACKOVERFLOW')),
+    last_checked TIMESTAMP
+);
+CREATE INDEX idx_links_type ON links(type);

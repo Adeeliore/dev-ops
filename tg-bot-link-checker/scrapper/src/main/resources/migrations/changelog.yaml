@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - include:
+      file: migrations/sql/001_create_chats_table.sql
+  - include:
+      file: migrations/sql/002_create_links_table.sql
+  - include:
+      file: migrations/sql/003_create_chat_links_table.sql
+  - include:
+      file: migrations/sql/004_create_tags_table.sql
+  - include:
+      file: migrations/sql/005_create_chat_link_tags_table.sql
+  - include:
+      file: migrations/sql/006_create_chat_link_filters_table.sql
+  - include:
+      file: migrations/sql/007_create_link_type_enum.sql
+  - include:
+      file: migrations/sql/008_change_column_type.sql

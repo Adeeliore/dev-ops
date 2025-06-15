@@ -1,0 +1,56 @@
+access-type: SQL
+
+app:
+  github-token: ${GITHUB_TOKEN}
+  message-transport: KAFKA
+  stackoverflow:
+    key: ${SO_TOKEN_KEY}
+    access-token: ${SO_ACCESS_TOKEN}
+  bot-base-url: ${BOT_URL:http://localhost:8080}
+  github-api-url: "https://api.github.com/repos/{owner}/{repo}"
+  stackoverflow-api-url: "https://api.stackexchange.com/2.3/questions/{id}"
+  include-stacktrace: true
+
+kafka:
+  group-id: bot-group
+  topic:
+    updates: updates-topic
+    dlq: updates-topic-dlq
+
+spring:
+  application:
+    name: Scrapper
+  liquibase:
+    enabled: true
+    change-log: classpath:/migrations/changelog.yaml
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/scrapper_db}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    properties:
+      spring.json.add.type.headers: false
+  redis:
+    host: localhost
+    port: 6379
+
+server:
+  port: 8081
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
+
+scheduler:
+  interval: 1
+  batch-size: 100
