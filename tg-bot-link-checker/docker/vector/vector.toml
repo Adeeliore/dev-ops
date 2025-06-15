@@ -1,0 +1,45 @@
+[sources.docker_logs]
+type = "docker_logs"
+docker_host = "unix:///var/run/docker.sock"
+
+[transforms.parse_docker]
+type = "remap"
+inputs = ["docker_logs"]
+source = '''
+ts = parse_timestamp!(.timestamp, "%+")
+.timestamp = format_timestamp!(ts, "%Y-%m-%d %H:%M:%S%.3f")
+
+raw = .message
+
+svc = parse_regex!(raw, r'--- \[(?P<service>[^\]]+)\]').service
+.service_name = svc
+
+parts = parse_regex!(
+  raw,
+  r'^[^ ]+\s+(?P<level>[A-Z]+)\s+\d+\s+---\s+\[[^\]]+\]\s+\[[^\]]+\]\s+(?P<msg>.+)$'
+)
+.log_level = parts.level
+.message   = parts.msg
+
+del(.docker)
+del(.container_created_at)
+del(.container_id)
+del(.host)
+del(.image)
+del(.label)
+del(.source_type)
+del(.stream)
+'''
+
+[sinks.clickhouse]
+type = "clickhouse"
+inputs = ["parse_docker"]
+endpoint = "http://clickhouse:8123"
+database = "logs"
+table = "docker_logs"
+batch.timeout_secs = 5
+
+[sinks.debug_console]
+type = "console"
+inputs = ["parse_docker"]
+encoding.codec = "json"

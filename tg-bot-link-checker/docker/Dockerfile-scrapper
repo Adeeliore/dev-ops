@@ -1,0 +1,28 @@
+# --- Stage 1: Build ---
+FROM maven:3.8.8-amazoncorretto-21 AS builder
+
+WORKDIR /app
+
+COPY pom.xml ./
+COPY bot/pom.xml ./bot/
+COPY scrapper/pom.xml ./scrapper/
+
+RUN mvn -B -ntp dependency:go-offline
+
+COPY . .
+
+RUN mvn -B -ntp -pl scrapper -am clean package -DskipTests
+
+# --- Stage 2: Runtime ---
+FROM eclipse-temurin:21
+
+RUN addgroup --system appgroup && adduser --system appuser --ingroup appgroup
+USER appuser
+
+WORKDIR /home/appuser/
+
+COPY --from=builder /app/scrapper/target/*.jar ./app-scrapper.jar
+
+EXPOSE 8081
+
+ENTRYPOINT ["java","-jar","/home/appuser/app-scrapper.jar"]

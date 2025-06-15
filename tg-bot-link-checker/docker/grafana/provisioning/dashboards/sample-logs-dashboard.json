@@ -1,0 +1,43 @@
+{
+    "uid": "docker-logs",
+    "title": "Docker Logs",
+    "version": 1,
+    "schemaVersion": 36,
+    "annotations": {
+        "list": []
+    },
+    "panels": [
+        {
+            "datasource": "ClickHouse",
+            "fieldConfig": {
+                "defaults": {},
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 10,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 1,
+            "options": {
+                "showHeader": true,
+                "showPagination": true
+            },
+            "pluginVersion": "9.0.0",
+            "targets": [
+                {
+                    "format": 1,
+                    "rawSql": "SELECT timestamp, service_name, log_level, message FROM logs.docker_logs ORDER BY timestamp DESC LIMIT 100",
+                    "refId": "A"
+                }
+            ],
+            "title": "Последние 100 логов",
+            "type": "table"
+        }
+    ],
+    "time": {
+        "from": "now-6h",
+        "to": "now"
+    }
+}

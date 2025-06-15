@@ -1,0 +1,24 @@
+FROM grafana/grafana:10.2.3
+
+USER root
+
+ENV CLICKHOUSE_PLUGIN_VERSION="4.6.0"
+ENV CLICKHOUSE_PLUGIN_NAME="grafana-clickhouse-datasource"
+
+RUN mkdir -p /etc/grafana/provisioning
+
+RUN apk add --no-cache unzip curl
+
+RUN mkdir -p /var/lib/grafana/plugins/${CLICKHOUSE_PLUGIN_NAME} && \
+    curl -L "https://grafana.com/api/plugins/${CLICKHOUSE_PLUGIN_NAME}/versions/${CLICKHOUSE_PLUGIN_VERSION}/download?os=linux&arch=amd64" \
+    -o "/tmp/${CLICKHOUSE_PLUGIN_NAME}.zip" && \
+    unzip "/tmp/${CLICKHOUSE_PLUGIN_NAME}.zip" -d "/var/lib/grafana/plugins/${CLICKHOUSE_PLUGIN_NAME}" && \
+    rm "/tmp/${CLICKHOUSE_PLUGIN_NAME}.zip"
+
+COPY provisioning /etc/grafana/provisioning
+
+RUN chown -R 472:472 /etc/grafana/provisioning
+
+USER grafana
+
+EXPOSE 3000
