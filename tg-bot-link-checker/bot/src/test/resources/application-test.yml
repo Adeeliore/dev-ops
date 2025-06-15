@@ -1,0 +1,6 @@
+app:
+  telegram-token: token
+kafka:
+  topic:
+    updates: update-topic
+    dlq: dlq-topic
